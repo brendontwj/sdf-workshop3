@@ -31,12 +31,6 @@ public class Session {
             String[] terms = input.split(" ");
             switch(terms[0]){
 
-                case CARTS:
-                    System.out.println("List of shopping carts");
-                    // list carts db files
-                    // TODO
-                    break;
-
                 case LIST:
                     // list items in cart
                     System.out.printf("Items in %s's shopping cart \n", currCart.getUsername());
@@ -54,25 +48,31 @@ public class Session {
 
                 case DELETE:
                     int idx = Integer.parseInt(terms[1]);
-                    String item = currCart.delete(idx);
+                    String item = currCart.delete(idx-1);
                     System.out.printf("Removed %s from %s's cart \n", item, currCart.getUsername());
                     break;
 
                 case LOAD:
-                    // currCart = reps
-                    // TODO
+                    currCart = repository.load(currCart.getUsername());
+                    System.out.printf("Loaded %s shopping cart. There are %s items(s)\n", currCart.getUsername() , currCart.getContents().size());
                     break;
 
-                case SAVE: 
-                    // TODO
+                case SAVE:
+                    repository.save(currCart);
+                    System.out.println("Done!");
                     break;
 
                 case LOGIN:
                     currCart = new Cart(terms[1]);
+                    System.out.printf("%s login OK\n", terms[1]);
+                    currCart = repository.load(currCart.getUsername());
+                    System.out.printf("Loaded %s shopping cart. There are %s items(s)\n", currCart.getUsername() , currCart.getContents().size());
                     break;
                 
                 case USERS:
-                    // TODO
+                    List<String> allCarts = repository.getShoppingCarts();
+                    System.out.println(allCarts);
+                    this.printList(allCarts);
                     break;
 
                 case END:
